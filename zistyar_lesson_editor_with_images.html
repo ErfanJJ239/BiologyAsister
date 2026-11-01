@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>زیست‌یار | درسنامه زیست‌شناسی دهم</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+:root{--green:#16834a;--dark:#104d32;--mint:#eaf7ee;--bg:#f7faf8;--text:#24352b;--line:#e2ece5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Vazirmatn,sans-serif;background:var(--bg);color:var(--text);line-height:2}
+header{background:#fff;padding:15px 6%;display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 3px 15px #00000008;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:800;color:var(--green)}.logo span{color:var(--dark)}
+nav{display:flex;gap:18px;flex-wrap:wrap}nav a{color:#44564a;text-decoration:none}
+.hero{padding:55px 20px;text-align:center;color:white;background:linear-gradient(135deg,#104d32,#16834a)}
+.hero h1{font-size:clamp(25px,4vw,38px);margin-bottom:8px}.hero p{color:#e3f4e8;margin-bottom:25px}
+.search{width:min(92%,600px);padding:14px 18px;border:0;border-radius:12px;font:inherit;outline:0}
+.wrap{width:min(92%,1150px);margin:38px auto}.section-title{color:var(--dark);font-size:24px;margin-bottom:20px}
+.toolbar-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.btn{border:0;border-radius:9px;padding:10px 17px;font:inherit;cursor:pointer;font-weight:600}
+.primary{background:var(--green);color:white}.secondary{background:var(--mint);color:var(--dark)}.danger{background:#fff0ef;color:#a22b24}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{background:white;border:1px solid var(--line);border-radius:15px;padding:22px;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 9px 24px #16834a12;border-color:#a5d5b5}
+.tag{display:inline-block;background:var(--mint);color:var(--green);padding:2px 11px;border-radius:7px;font-size:13px;margin-bottom:8px}
+.card h3{font-size:18px;margin-bottom:7px}.card p{font-size:14px;color:#748078}
+.lesson{display:none;background:white;border:1px solid var(--line);border-radius:16px;padding:clamp(18px,4vw,38px);margin-top:28px}
+.lesson h2{color:var(--green);margin-bottom:18px}.lesson h3{color:var(--dark);margin:22px 0 8px}.lesson p{margin:0 0 14px}.lesson ul,.lesson ol{padding-right:25px;margin-bottom:15px}
+.note{background:#eef8f0;border-right:4px solid var(--green);padding:14px 17px;border-radius:8px;margin:18px 0}
+.admin{background:white;border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:30px}
+.admin h2{color:var(--dark);margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:5px;margin:12px 0}.field label{font-weight:600;font-size:14px}
+.field input,.field textarea{font:inherit;border:1px solid #d6e3d9;border-radius:8px;padding:10px 12px;background:#fff;width:100%}
+.field textarea{min-height:80px;resize:vertical}
+.editor-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.editor-tools button{background:#f0f5f1;border:1px solid #dce7df;border-radius:6px;padding:6px 10px;cursor:pointer;font:inherit}
+#editor{min-height:240px;border:1px solid #d6e3d9;border-radius:10px;padding:16px;background:#fff;outline:none;line-height:2}
+#editor:focus{border-color:var(--green)}
+.admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.help{font-size:13px;color:#68776c;margin-top:8px}
+footer{text-align:center;padding:25px;background:#104d32;color:white;margin-top:55px}
+.hidden{display:none!important}
+@media(max-width:600px){header{flex-direction:column}nav{justify-content:center}.hero{padding:42px 15px}}
+@media print{header,.hero,.toolbar-top,.cards,.admin,footer,.print{display:none!important}.lesson{display:block;border:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🌿 زیست<span>‌یار</span></div>
+  <nav><a href="#">صفحه اصلی</a><a href="#chapters">درسنامه‌ها</a><a href="#admin">مدیریت محتوا</a></nav>
+</header>
+
+<section class="hero">
+  <h1>زیست‌شناسی دهم را هوشمندانه یاد بگیر!</h1>
+  <p>درسنامه‌های مفهومی، نکات کلیدی و آموزش ساده و جذاب زیست‌شناسی</p>
+  <input id="search" class="search" type="search" placeholder="جست‌وجو در عنوان فصل‌ها..." oninput="renderCards()">
+</section>
+
+<main class="wrap" id="chapters">
+  <div class="toolbar-top">
+    <h2 class="section-title">📚 درسنامه‌های زیست‌شناسی دهم</h2>
+    <button class="btn secondary" onclick="exportData()">⬇ خروجی پشتیبان درسنامه‌ها</button>
+    <label class="btn secondary" for="importFile">⬆ بازیابی پشتیبان</label>
+    <input id="importFile" type="file" accept=".json,application/json" class="hidden" onchange="importData(event)">
+  </div>
+  <div class="cards" id="chapterList"></div>
+  <article class="lesson" id="lessonContent">
+    <h2 id="lessonTitle"></h2>
+    <div id="lessonText"></div>
+    <button class="btn primary print" onclick="window.print()">🖨 چاپ / ذخیره PDF</button>
+  </article>
+
+  <section class="admin" id="admin">
+    <h2>📝 پنل مدیریت درسنامه</h2>
+    <p>از این بخش درسنامه جدید بساز یا درسنامه‌های موجود را ویرایش کن. تغییرات در همین مرورگر ذخیره می‌شوند.</p>
+    <div class="field">
+      <label for="lessonId">شماره فصل (برای فصل‌های جدید یک شماره یکتا وارد کن)</label>
+      <input id="lessonId" type="number" min="1" placeholder="مثلاً 8">
+    </div>
+    <div class="field">
+      <label for="lessonName">عنوان درسنامه</label>
+      <input id="lessonName" type="text" placeholder="مثلاً فصل هشتم: ...">
+    </div>
+    <div class="field">
+      <label for="lessonSummary">توضیح کوتاه کارت</label>
+      <input id="lessonSummary" type="text" placeholder="خلاصه‌ای که در کارت فصل نمایش داده می‌شود">
+    </div>
+    <div class="field">
+      <label>محتوای درسنامه</label>
+      <div class="editor-tools">
+        <button type="button" onclick="formatText('bold')"><b>پررنگ</b></button>
+        <button type="button" onclick="formatText('formatBlock','H3')">عنوان بخش</button>
+        <button type="button" onclick="formatText('insertUnorderedList')">• فهرست</button>
+        <button type="button" onclick="insertNote()">📌 کادر نکته</button>
+        <button type="button" onclick="chooseImage()">🖼 افزودن تصویر</button>
+        <button type="button" onclick="formatText('removeFormat')">پاک‌کردن قالب</button>
+        <input id="imagePicker" type="file" accept="image/*" class="hidden" onchange="insertUploadedImage(event)">
+      </div>
+      <div id="editor" contenteditable="true" spellcheck="true">
+        <h3>عنوان بخش درس</h3>
+        <p>متن درسنامه را اینجا وارد کن...</p>
+      </div>
+      <p class="help">می‌توانی متن را از Word کپی کنی. برای افزودن تصویر، پس از کپی‌کردن آن در ویرایشگر کلیک راست و Paste کن (پشتیبانی مرورگر ممکن است متفاوت باشد).</p>
+    </div>
+    <div class="admin-actions">
+      <button class="btn primary" onclick="saveLesson()">💾 ذخیره درسنامه</button>
+      <button class="btn secondary" onclick="clearForm()">درسنامه جدید</button>
+      <button class="btn danger" onclick="deleteLesson()">🗑 حذف درسنامه انتخاب‌شده</button>
+    </div>
+    <p class="help">توجه: اطلاعات در حافظه همین مرورگر ذخیره می‌شود؛ با پاک‌کردن داده‌های مرورگر ممکن است حذف شود. برای انتقال به دستگاه دیگر، از «خروجی پشتیبان» استفاده کن.</p>
+  </section>
+</main>
+<footer><p>🌱 زیست‌یار | همراه تو در یادگیری زیست‌شناسی</p><small>درسنامه‌های قابل ویرایش زیست دهم</small></footer>
+
+<script>
+const defaultLessons = {
+  1:{title:"فصل اول: دنیای زنده",summary:"ویژگی‌های جانداران و سطوح سازمان‌یابی حیات",content:`<h3>ویژگی‌های جانداران</h3><p>جانداران ویژگی‌های مشترکی دارند که آن‌ها را از موجودات غیرزنده متمایز می‌کند.</p><ul><li>نظم و سازمان‌یابی</li><li>نیاز به انرژی</li><li>حفظ تعادل درونی</li><li>رشد و نمو</li><li>پاسخ به محرک‌ها</li><li>تولیدمثل</li><li>سازش با محیط</li></ul><div class="note"><strong>نکته مهم:</strong> یاخته واحد بنیادی ساختار و عملکرد جانداران است.</div><h3>سطوح سازمان‌یابی حیات</h3><p>مولکول ← اندامک ← یاخته ← بافت ← اندام ← دستگاه ← جاندار</p>`},
+  2:{title:"فصل دوم: گوارش و جذب مواد",summary:"ساختار دستگاه گوارش و فرایند جذب",content:`<h3>وظیفه دستگاه گوارش</h3><p>دستگاه گوارش غذا را به مواد ساده‌تر تبدیل می‌کند تا مواد مغذی جذب بدن شوند.</p><h3>بخش‌های دستگاه گوارش</h3><ul><li>دهان</li><li>حلق</li><li>مری</li><li>معده</li><li>روده باریک</li><li>روده بزرگ</li><li>راست‌روده و مخرج</li></ul><div class="note"><strong>نکته:</strong> بیشترین جذب مواد مغذی در روده باریک انجام می‌شود.</div>`},
+  3:{title:"فصل سوم: تبادلات گازی",summary:"تنفس، ساختار شش‌ها و تبادل گازها",content:`<h3>اهمیت تبادل گازها</h3><p>یاخته‌ها برای انجام تنفس یاخته‌ای به اکسیژن نیاز دارند و کربن‌دی‌اکسید تولید می‌کنند.</p><h3>مسیر عبور هوا</h3><p>بینی ← حلق ← حنجره ← نای ← نایژه‌ها ← نایژک‌ها ← حبابک‌ها</p><div class="note"><strong>نکته:</strong> تبادل گازها بین حبابک‌های ششی و مویرگ‌ها از طریق انتشار انجام می‌شود.</div>`},
+  4:{title:"فصل چهارم: گردش مواد در بدن",summary:"قلب، خون و دستگاه گردش مواد",content:`<h3>اجزای خون</h3><ul><li>پلاسما</li><li>گلبول قرمز</li><li>گلبول سفید</li><li>پلاکت</li></ul><h3>وظیفه قلب</h3><p>قلب با انقباض‌های منظم، خون را در رگ‌ها به گردش درمی‌آورد.</p><div class="note"><strong>نکته:</strong> سرخرگ‌ها خون را از قلب خارج می‌کنند و سیاهرگ‌ها خون را به قلب بازمی‌گردانند.</div>`},
+  5:{title:"فصل پنجم: تنظیم اسمزی و دفع مواد زائد",summary:"کلیه‌ها و تنظیم آب و مواد دفعی",content:`<h3>وظیفه دستگاه دفع ادرار</h3><p>این دستگاه مواد زائد حاصل از سوخت‌وساز را دفع می‌کند و در تنظیم آب و یون‌های بدن نقش دارد.</p><h3>اجزای دستگاه ادراری</h3><ul><li>کلیه‌ها</li><li>میزنای</li><li>مثانه</li><li>میزراه</li></ul><div class="note"><strong>نکته:</strong> نفرون واحد ساختاری و عملکردی کلیه است.</div>`},
+  6:{title:"فصل ششم: از یاخته تا گیاه",summary:"ساختار گیاهان و بافت‌های گیاهی",content:`<h3>ویژگی‌های یاخته گیاهی</h3><ul><li>دیواره یاخته‌ای</li><li>غشای یاخته‌ای</li><li>واکوئل مرکزی بزرگ</li><li>سبزدیسه در یاخته‌های فتوسنتزکننده</li></ul><h3>بافت‌های گیاهی</h3><p>بافت پوششی، بافت زمینه‌ای و بافت آوندی از بافت‌های اصلی گیاه هستند.</p>`},
+  7:{title:"فصل هفتم: جذب و انتقال مواد در گیاهان",summary:"ریشه، آوندها و انتقال مواد در گیاه",content:`<h3>جذب آب و مواد معدنی</h3><p>ریشه گیاه آب و مواد معدنی را از خاک جذب می‌کند.</p><h3>آوندهای گیاهی</h3><ul><li><strong>آوند چوبی:</strong> انتقال آب و مواد معدنی</li><li><strong>آوند آبکشی:</strong> انتقال مواد آلی حاصل از فتوسنتز</li></ul><div class="note"><strong>نکته:</strong> تعرق در ایجاد کشش و انتقال آب در آوند چوبی نقش مهمی دارد.</div>`}
+};
+let lessons = loadLessons();
+let selectedId = null;
+function loadLessons(){
+  try { const saved=localStorage.getItem("zistyar_lessons_v1"); return saved?JSON.parse(saved):structuredClone(defaultLessons); }
+  catch(e){return structuredClone(defaultLessons);}
+}
+function persist(){localStorage.setItem("zistyar_lessons_v1",JSON.stringify(lessons));}
+function renderCards(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const list=document.getElementById("chapterList"); list.innerHTML="";
+  Object.keys(lessons).sort((a,b)=>Number(a)-Number(b)).forEach(id=>{
+    const l=lessons[id]; const hay=(l.title+" "+l.summary+" "+id).toLowerCase();
+    if(!hay.includes(q))return;
+    const card=document.createElement("div");card.className="card";
+    card.innerHTML=`<span class="tag">فصل ${escapeHTML(id)}</span><h3>${escapeHTML(l.title)}</h3><p>${escapeHTML(l.summary||"برای مشاهده درسنامه کلیک کن")}</p>`;
+    card.onclick=()=>showLesson(id);list.appendChild(card);
+  });
+}
+function showLesson(id){
+  selectedId=String(id);const l=lessons[id];
+  document.getElementById("lessonTitle").textContent=l.title;
+  document.getElementById("lessonText").innerHTML=l.content;
+  document.getElementById("lessonContent").style.display="block";
+  document.getElementById("lessonContent").scrollIntoView({behavior:"smooth",block:"start"});
+  document.getElementById("lessonId").value=id;
+  document.getElementById("lessonName").value=l.title;
+  document.getElementById("lessonSummary").value=l.summary||"";
+  document.getElementById("editor").innerHTML=l.content;
+}
+function formatText(command,value=null){document.getElementById("editor").focus();document.execCommand(command,false,value);}
+function insertNote(){document.getElementById("editor").focus();document.execCommand("insertHTML",false,'<div class="note"><strong>نکته مهم:</strong> متن نکته را اینجا بنویس.</div>');}
+function chooseImage(){document.getElementById("imagePicker").click();}
+function insertUploadedImage(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith("image/")){alert("لطفاً یک فایل تصویری انتخاب کن.");event.target.value="";return;}
+  if(file.size>5*1024*1024){alert("حجم تصویر بهتر است کمتر از ۵ مگابایت باشد.");event.target.value="";return;}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=document.createElement("img");
+    img.src=reader.result;
+    img.alt=file.name;
+    img.style.maxWidth="100%";
+    img.style.height="auto";
+    img.style.display="block";
+    img.style.margin="18px auto";
+    img.style.borderRadius="10px";
+    const editor=document.getElementById("editor");
+    editor.focus();
+    const selection=window.getSelection();
+    if(selection && selection.rangeCount && editor.contains(selection.anchorNode)){
+      const range=selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(img);
+      range.setStartAfter(img);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }else{
+      editor.appendChild(img);
+      editor.appendChild(document.createElement("p"));
+    }
+    event.target.value="";
+  };
+  reader.readAsDataURL(file);
+}
+function saveLesson(){
+  const id=document.getElementById("lessonId").value.trim();
+  const title=document.getElementById("lessonName").value.trim();
+  const summary=document.getElementById("lessonSummary").value.trim();
+  const content=document.getElementById("editor").innerHTML.trim();
+  if(!id||Number(id)<1||!title||!content){alert("لطفاً شماره فصل، عنوان و محتوای درسنامه را وارد کن.");return;}
+  lessons[id]={title,summary,content};persist();renderCards();showLesson(id);alert("درسنامه با موفقیت در این مرورگر ذخیره شد.");
+}
+function clearForm(){
+  selectedId=null;document.getElementById("lessonId").value="";
+  document.getElementById("lessonName").value="";
+  document.getElementById("lessonSummary").value="";
+  document.getElementById("editor").innerHTML="<h3>عنوان بخش درس</h3><p>متن درسنامه را اینجا وارد کن...</p>";
+  document.getElementById("lessonContent").style.display="none";
+}
+function deleteLesson(){
+  const id=document.getElementById("lessonId").value.trim();
+  if(!id||!lessons[id]){alert("ابتدا یک درسنامه موجود را انتخاب کن.");return;}
+  if(!confirm("از حذف این درسنامه مطمئنی؟"))return;
+  delete lessons[id];persist();renderCards();clearForm();alert("درسنامه حذف شد.");
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(lessons,null,2)],{type:"application/json;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="zistyar-lessons-backup.json";a.click();URL.revokeObjectURL(a.href);
+}
+function importData(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{const data=JSON.parse(reader.result);if(!data||typeof data!=="object")throw Error();
+      lessons=data;persist();renderCards();clearForm();alert("پشتیبان بازیابی شد.");
+    }catch(e){alert("فایل پشتیبان معتبر نیست.");}
+    event.target.value="";
+  };
+  reader.readAsText(file,"UTF-8");
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+renderCards();
+</script>
+</body>
+</html>
